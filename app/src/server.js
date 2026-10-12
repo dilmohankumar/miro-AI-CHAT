@@ -16,4 +16,9 @@ else console.warn('[ai] No OPENAI_API_KEY / GEMINI_API_KEY set: only FAQ and sma
 
 const log = await openChatLog({ uri: process.env.MONGODB_URI, retentionDays: Number(process.env.LOG_RETENTION_DAYS || 30) });
 
-createApp({ content, log }).listen(PORT, () => console.log(`[server] http://localhost:${PORT}  (demo: /demo.html)`));
+const app = createApp({ content, log });
+const { origins } = app.locals;
+if (origins.open) console.warn('[origins] ALLOWED_ORIGINS not set: ANY website can use this chatbot. Set it in .env before going live.');
+else console.log(`[origins] only these websites can use the chatbot (from ${origins.source}): ${origins.list.join(', ')}${process.env.NODE_ENV === 'production' ? '' : '  (+ localhost, because NODE_ENV is not "production")'}`);
+
+app.listen(PORT, () => console.log(`[server] http://localhost:${PORT}  (demo: /demo.html)`));

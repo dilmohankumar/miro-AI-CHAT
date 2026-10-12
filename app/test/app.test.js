@@ -6,6 +6,7 @@ import { answerQuestion, FALLBACK } from '../src/engine.js';
 import { isOpenAIConfigured, isGeminiConfigured, completeWithFallback, resetCooldowns, askGemini } from '../src/ai.js';
 import { createApp } from '../src/app.js';
 import { createChatLog, openChatLog } from '../src/chatlog.js';
+import { createOriginPolicy, parseOrigins } from '../src/origins.js';
 import { MongoClient } from 'mongodb';
 
 process.env.NODE_ENV = 'test';
@@ -208,4 +209,45 @@ test('isGeminiConfigured rejects blanks and placeholders', () => {
   assert.equal(isGeminiConfigured(''), false);
   assert.equal(isGeminiConfigured('your-key-here'), false);
   assert.equal(isGeminiConfigured('AQ.abc'), true);
+});
+
+test('origins: ALLOWED_ORIGINS from env, normalized, config.json as fallback', () => {
+  const env = { ALLOWED_ORIGINS: 'https://akatsukisites.com/, https://www.akatsukisites.com/some/page ,  ' };
+  const p = createOriginPolicy({ env: { ...env, NODE_ENV: 'production' }, config: { allowedOrigins: ['https://other.com'] } });
+  assert.deepEqual(p.list, ['https://akatsukisites.com', 'https://www.akatsukisites.com']); // env wins, trailing slash/path dropped
+  assert.equal(p.source, 'ALLOWED_ORIGINS');
+  assert.equal(p.allows('https://akatsukisites.com'), true);
+  assert.equal(p.allows('https://akatsukisites.com/'), true);
+  assert.equal(p.allows('https://evil.com'), false);
+  assert.equal(p.allows('https://akatsukisites.com.evil.com'), false); // no suffix tricks
+  assert.equal(p.allows('http://akatsukisites.com'), false); // scheme must match
+  assert.equal(p.allows(undefined), false); // no Origin header (curl, bots) is refused when locked
+  assert.equal(p.allows('null'), false);
+
+  const fallback = createOriginPolicy({ env: { NODE_ENV: 'production' }, config: { allowedOrigins: ['https://other.com'] } });
+  assert.equal(fallback.source, 'config.json');
+  assert.equal(fallback.allows('https://other.com'), true);
+});
+
+test('origins: localhost allowed only outside production; empty list means open', () => {
+  const locked = { ALLOWED_ORIGINS: 'https://akatsukisites.com' };
+  assert.equal(createOriginPolicy({ env: { ...locked, NODE_ENV: 'development' } }).allows('http://localhost:4200'), true);
+  assert.equal(createOriginPolicy({ env: { ...locked, NODE_ENV: 'production' } }).allows('http://localhost:4200'), false);
+  assert.equal(createOriginPolicy({ env: { ...locked, NODE_ENV: 'production' } }).allows('http://127.0.0.1:3000'), false);
+  const open = createOriginPolicy({ env: {}, config: {} });
+  assert.equal(open.open, true);
+  assert.equal(open.allows('https://anything.com'), true);
+  assert.deepEqual(parseOrigins('not a url, https://ok.com'), ['https://ok.com']); // bad entries are ignored (with a warning)
+});
+
+test('HTTP: ALLOWED_ORIGINS in the environment locks the chat endpoint', async (t) => {
+  process.env.ALLOWED_ORIGINS = 'https://akatsukisites.com';
+  process.env.NODE_ENV = 'production';
+  t.after(() => { delete process.env.ALLOWED_ORIGINS; process.env.NODE_ENV = 'test'; });
+  const server = createApp({ content }).listen(0);
+  t.after(() => server.close());
+  const send = (origin) => fetch(`http://localhost:${server.address().port}/api/chat`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...(origin && { Origin: origin }) }, body: JSON.stringify({ message: 'opening hours' }) });
+  assert.equal((await send('https://akatsukisites.com')).status, 200);
+  assert.equal((await send('https://evil.com')).status, 403);
+  assert.equal((await send()).status, 403);
 });

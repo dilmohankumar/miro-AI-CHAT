@@ -9,6 +9,7 @@ import rateLimit from 'express-rate-limit';
 import { answerQuestion } from './engine.js';
 import { completeWithFallback, isAiConfigured, PROVIDERS } from './ai.js';
 import { createSessionStore, createDailyLimiter } from './sessions.js';
+import { createOriginPolicy } from './origins.js';
 
 const PUBLIC_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'public');
 
@@ -16,7 +17,7 @@ export function createApp({ content, dailyLimit = Number(process.env.DAILY_CHAT_
   const { config } = content;
   const sessions = createSessionStore();
   const daily = createDailyLimiter(dailyLimit);
-  const allowedOrigins = (config.allowedOrigins || []).map((o) => o.replace(/\/$/, ''));
+  const origins = createOriginPolicy({ config });
 
   const app = express();
   app.set('trust proxy', 1); // behind nginx/ALB so rate limiting sees real client IPs
@@ -54,8 +55,7 @@ export function createApp({ content, dailyLimit = Number(process.env.DAILY_CHAT_
 
   app.post('/api/chat', limiter, async (req, res, next) => {
     try {
-      const origin = (req.get('origin') || '').replace(/\/$/, '');
-      if (allowedOrigins.length && !allowedOrigins.includes(origin)) {
+      if (!origins.allows(req.get('origin'))) {
         return res.status(403).json({ error: 'This website is not authorized to use this chatbot.' });
       }
 
@@ -88,5 +88,6 @@ export function createApp({ content, dailyLimit = Number(process.env.DAILY_CHAT_
     res.status(err.status || 500).json({ error: err.status ? err.message : 'Internal server error' });
   });
 
+  app.locals.origins = origins;
   return app;
 }

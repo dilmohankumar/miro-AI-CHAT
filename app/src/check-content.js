@@ -70,5 +70,14 @@ else {
   files.forEach((f) => /replace this file|WRITE |Who you are, what you do/i.test(fs.readFileSync(path.join(kDir, f), 'utf8')) && fail(`${f}: still contains sample/template text`));
 }
 
+start('origins');
+{
+  const { createOriginPolicy } = await import('./origins.js');
+  const pol = createOriginPolicy({ config: cfg || {} });
+  if (pol.open) console.log('  ! ALLOWED_ORIGINS is not set: ANY website can use your chatbot. Set it in .env before going live.');
+  else ok(`only ${pol.list.join(', ')} (from ${pol.source})`);
+  if (process.env.NODE_ENV !== 'production') console.log('  ! NODE_ENV is not "production": localhost is also allowed (fine for testing; set NODE_ENV=production on the live server).');
+}
+
 console.log(problems ? `\n${problems} problem(s) to fix before deploying.` : '\nAll good.');
 process.exit(problems ? 1 : 0);

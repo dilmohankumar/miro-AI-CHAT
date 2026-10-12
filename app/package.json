@@ -12,7 +12,7 @@
     "logs": "node --env-file=.env src/logs-report.js",
     "test": "node --test test/*.test.js",
     "build:widget": "vite build --config widget/vite.config.js",
-    "check": "node src/check-content.js"
+    "check": "node --env-file-if-exists=.env src/check-content.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
