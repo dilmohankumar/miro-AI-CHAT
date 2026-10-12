@@ -1,12 +1,485 @@
 [
   {
-    "question": "What are your opening hours?",
-    "alternatePhrases": ["when are you open", "working hours", "timing"],
-    "answer": "We are open 9am-6pm, Monday to Saturday."
+    "question": "What is AkatuskiSites?",
+    "alternatePhrases": [
+      "what is this website",
+      "about akatsukisites",
+      "what do you do",
+      "kya hai ye website"
+    ],
+    "answer": "AkatuskiSites is a pay-to-rank leaderboard for websites. One site holds the top spot, \"Elite Site #1\", and a Top 10 board shows the highest-ranked sites. Anyone can take #1 by paying more than the current #1 paid."
   },
   {
-    "question": "How can I contact you?",
-    "alternatePhrases": ["contact number", "phone", "email address"],
-    "answer": "You can reach us at hello@example.com."
+    "question": "What does Claim #1 mean?",
+    "alternatePhrases": [
+      "how does claim #1 work",
+      "explain claim #1",
+      "what does claiming mean",
+      "meaning of claim #1"
+    ],
+    "answer": "Claim #1 means paying a bit more than whoever is #1 right now to take the top spot. The moment your payment is confirmed, your business becomes #1 and is shown on the main page with your name, logo, link and description."
+  },
+  {
+    "question": "How do I claim #1?",
+    "alternatePhrases": [
+      "how to claim the top spot",
+      "how can I get the first position",
+      "kaise claim kare",
+      "how to claim #1",
+      "how to claim",
+      "steps to claim",
+      "claim process",
+      "how to become number 1",
+      "how to get number 1 spot",
+      "claim kaise karte hain"
+    ],
+    "answer": "Claim #1 means paying a bit more than the current #1 to take the top spot. Steps: 1) Click \"Claim #1\". 2) Fill in your business name, website URL, optional logo and a short description, then click \"Continue to payment\". 3) Check the amount and click \"Pay\". 4) Complete the payment on the secure checkout. You become #1 as soon as it is confirmed. No account is needed."
+  },
+  {
+    "question": "How much does it cost to claim #1?",
+    "alternatePhrases": [
+      "price to claim #1",
+      "what is the price",
+      "how much to become number one",
+      "cost of claiming",
+      "kitna paisa lagta hai",
+      "kitne ka hai",
+      "what is the price to become number 1",
+      "price to become number 1",
+      "price of number 1",
+      "cost to become number 1",
+      "how much to become number 1",
+      "price kitna hai",
+      "rate kya hai",
+      "kitna lagega"
+    ],
+    "answer": "The price to claim #1 is whatever the current #1 paid plus ₹1,000. If the board is empty, the first claim is ₹1,000. The exact amount right now is shown on the \"Claim #1\" button and on the payment screen."
+  },
+  {
+    "question": "Why does the price keep going up?",
+    "alternatePhrases": [
+      "why is the price increasing",
+      "why +1000",
+      "why is it more expensive now",
+      "price keeps changing"
+    ],
+    "answer": "The #1 spot always goes to whoever pays more than the current holder. So each new claim costs ₹1,000 more than the current #1 paid. The price stays the same until someone claims."
+  },
+  {
+    "question": "What is the price for the very first claim?",
+    "alternatePhrases": [
+      "minimum amount",
+      "starting price",
+      "base price",
+      "entry price",
+      "lowest price"
+    ],
+    "answer": "If nobody holds #1 yet, the first claim costs ₹1,000, the minimum entry amount. After that, every claim costs ₹1,000 more than the current #1 paid."
+  },
+  {
+    "question": "Who is #1 right now?",
+    "alternatePhrases": [
+      "current number one",
+      "who holds the top spot",
+      "current leader",
+      "what is the current amount",
+      "abhi number 1 kaun hai"
+    ],
+    "answer": "That changes whenever someone claims the spot, so I can't see it live. You can see the current #1, their amount and the price to beat on the main page of the site."
+  },
+  {
+    "question": "What details do I need to claim #1?",
+    "alternatePhrases": [
+      "what information is required",
+      "what do I need to fill in",
+      "claim form fields",
+      "what do I enter in the form"
+    ],
+    "answer": "The form asks for: your website or business name (up to 40 characters), your website URL (for example meerasbakery.in), an optional logo image, and a short description (up to 140 characters)."
+  },
+  {
+    "question": "Is the logo required?",
+    "alternatePhrases": [
+      "do I need a logo",
+      "logo size limit",
+      "what logo format",
+      "can I skip the logo",
+      "logo upload",
+      "is logo mandatory",
+      "is logo compulsory",
+      "logo required",
+      "logo optional",
+      "logo zaroori hai"
+    ],
+    "answer": "No, the logo is optional. You can upload an image (png, jpg, webp, gif or svg) up to about 500 KB. If you skip it, the first letter of your business name is shown instead."
+  },
+  {
+    "question": "How long can the description be?",
+    "alternatePhrases": [
+      "description limit",
+      "maximum characters description",
+      "how many characters name",
+      "character limit"
+    ],
+    "answer": "The description can be up to 140 characters and is required. The business name can be up to 40 characters in the form. Keep the description to one or two lines about what you do."
+  },
+  {
+    "question": "What payment methods are accepted?",
+    "alternatePhrases": [
+      "how can I pay",
+      "can I pay with upi",
+      "is card accepted",
+      "netbanking",
+      "payment options",
+      "accepted payment methods",
+      "payment kaise kare",
+      "kaise pay kare",
+      "can I use google pay",
+      "debit card",
+      "credit card"
+    ],
+    "answer": "You can pay with UPI, card or netbanking through Razorpay, and by card through Stripe's payment form on the page. Pay Later and EMI are not offered. Payments are in Indian rupees (INR)."
+  },
+  {
+    "question": "Is the payment safe?",
+    "alternatePhrases": [
+      "is it secure",
+      "do you store my card details",
+      "is my card safe",
+      "do you save payment details",
+      "safe to pay"
+    ],
+    "answer": "Yes. You pay on the secure checkout of Razorpay or Stripe. AkatuskiSites never sees or stores your card, UPI or banking details. The price is decided by the server, so it cannot be changed from your browser."
+  },
+  {
+    "question": "Is it a one-time payment or a subscription?",
+    "alternatePhrases": [
+      "is it recurring",
+      "monthly charge",
+      "do I pay every month",
+      "auto renew",
+      "subscription"
+    ],
+    "answer": "It is a one-time payment. There is no subscription and no recurring charge."
+  },
+  {
+    "question": "When do I become #1?",
+    "alternatePhrases": [
+      "how fast do I get the top spot",
+      "is it instant",
+      "when will my site appear",
+      "how long after payment",
+      "how soon will I be number 1",
+      "kab number 1 banunga",
+      "instantly top spot",
+      "when do I become number 1",
+      "when will I be number 1"
+    ],
+    "answer": "Immediately. You become #1 the second your payment is confirmed. If the page says \"Payment received, finishing up\", it will update shortly and you can safely leave the page."
+  },
+  {
+    "question": "How long will I stay #1?",
+    "alternatePhrases": [
+      "how long does the top spot last",
+      "does #1 expire",
+      "can I lose my position",
+      "is there a time limit"
+    ],
+    "answer": "There is no time limit. You stay #1 until someone pays more than your amount."
+  },
+  {
+    "question": "What happens if someone pays more than me?",
+    "alternatePhrases": [
+      "someone beat my amount",
+      "I lost the top spot",
+      "what if another site takes #1",
+      "kisi ne zyada paise de diye"
+    ],
+    "answer": "They become #1 and everyone else, including you, moves down one place on the Top 10 board. You can take the spot back anytime by paying more than their amount."
+  },
+  {
+    "question": "What happens if I fall out of the top 10?",
+    "alternatePhrases": [
+      "below rank 10",
+      "removed from the board",
+      "is my listing deleted",
+      "archived"
+    ],
+    "answer": "Only the top 10 are shown. If you drop below rank 10 you no longer appear on the visible board, but your record is kept in an archive and is not deleted."
+  },
+  {
+    "question": "Can I take back #1 after losing it?",
+    "alternatePhrases": [
+      "claim again",
+      "reclaim the top spot",
+      "take back my position",
+      "pay again to be first"
+    ],
+    "answer": "Yes. Anyone, including a business that just lost the spot, can take #1 again by paying more than the current #1's amount."
+  },
+  {
+    "question": "Do I need an account or to sign up?",
+    "alternatePhrases": [
+      "is login required",
+      "do I have to register",
+      "create account",
+      "signup needed",
+      "do i need to login",
+      "koi account banana padega",
+      "registration required"
+    ],
+    "answer": "No. There is no login or signup. Anyone can claim #1 just by filling in the form and paying."
+  },
+  {
+    "question": "What happens if my payment fails?",
+    "alternatePhrases": [
+      "payment declined",
+      "payment not going through",
+      "card failed",
+      "upi failed",
+      "payment error",
+      "payment failed",
+      "payment fail ho gaya",
+      "my payment failed what to do",
+      "transaction failed",
+      "payment unsuccessful",
+      "payment nahi hua"
+    ],
+    "answer": "You are not charged for a failed payment. On Razorpay the window stays open and shows the reason with a \"Retry payment\" option, so you can try again. If you close it, the order is cancelled and the price is released. Stripe shows \"Payment not completed — you were not charged\"."
+  },
+  {
+    "question": "What if I close the payment window or leave the page?",
+    "alternatePhrases": [
+      "closed the payment page",
+      "I went back",
+      "abandoned payment",
+      "left in the middle of payment"
+    ],
+    "answer": "Nothing is charged if you do not complete the payment. The price that was locked for you is released when you close the window. You can start again whenever you like."
+  },
+  {
+    "question": "Was I charged if the payment was cancelled?",
+    "alternatePhrases": [
+      "payment cancelled",
+      "did money get deducted",
+      "am I charged",
+      "not charged"
+    ],
+    "answer": "No. If you see \"Payment cancelled\" or \"Payment not completed\", you were not charged. If money was deducted but your spot did not update, please raise a support ticket from the footer with the details."
+  },
+  {
+    "question": "My money was deducted but I am not #1. What now?",
+    "alternatePhrases": [
+      "payment done but rank not updated",
+      "paid but not showing",
+      "amount deducted but no top spot",
+      "paisa kat gaya",
+      "paisa kat gaya par rank nahi mila",
+      "payment successful but not number 1",
+      "amount debited but not updated",
+      "money cut but no spot"
+    ],
+    "answer": "First wait a minute: \"Payment received, finishing up\" means it is being finalised and your spot will update shortly. If it still does not update, raise a support ticket from the footer with your name, website and payment reference, and the team will reply by email within 24 hours."
+  },
+  {
+    "question": "How long do I have to complete the payment?",
+    "alternatePhrases": [
+      "payment time limit",
+      "order expiry",
+      "how long is the price locked",
+      "does the price expire"
+    ],
+    "answer": "When you start paying, the price is locked for you for 15 minutes. If the payment is not completed in that time, the order expires and the price is released."
+  },
+  {
+    "question": "Can I get a refund?",
+    "alternatePhrases": [
+      "refund policy",
+      "money back",
+      "cancel after payment",
+      "return my payment",
+      "refund milega kya",
+      "money refund",
+      "get my money back",
+      "refund request"
+    ],
+    "answer": "A refund policy isn't published on the site, so I can't promise one. Please raise a support ticket from the footer and explain your case; the team replies by email within 24 hours."
+  },
+  {
+    "question": "Can I change my name, link, logo or description after paying?",
+    "alternatePhrases": [
+      "edit my listing",
+      "update my website url",
+      "change my logo",
+      "remove my listing"
+    ],
+    "answer": "There is no edit option on the site after payment. Please raise a support ticket from the footer with the change you need and the team will get back to you by email."
+  },
+  {
+    "question": "How do I contact support?",
+    "alternatePhrases": [
+      "support",
+      "raise a ticket",
+      "contact",
+      "help",
+      "customer care",
+      "complaint",
+      "contact number or email",
+      "support se kaise contact kare",
+      "contact support",
+      "talk to a person",
+      "raise a complaint",
+      "customer support"
+    ],
+    "answer": "Click \"support\" in the footer and fill in your name, email, subject and details. You get a reference code like VRT-48213, and the team replies by email within 24 hours."
+  },
+  {
+    "question": "How long does support take to reply?",
+    "alternatePhrases": [
+      "support response time",
+      "when will you reply",
+      "how many hours for reply"
+    ],
+    "answer": "The team replies by email within 24 hours of your ticket."
+  },
+  {
+    "question": "What is the support reference code?",
+    "alternatePhrases": [
+      "ticket reference",
+      "VRT code",
+      "ticket number",
+      "what is my ref code"
+    ],
+    "answer": "It is a code like VRT-48213 shown right after you submit a support ticket. Quote it whenever you follow up about that ticket."
+  },
+  {
+    "question": "Will I get more traffic or SEO benefits?",
+    "alternatePhrases": [
+      "will it increase my sales",
+      "backlink",
+      "does it help seo",
+      "guaranteed visitors",
+      "is it worth it"
+    ],
+    "answer": "Your business name, logo, link and description are shown to everyone who visits the main page while you hold or appear on the board. I can't promise any traffic, sales or SEO results."
+  },
+  {
+    "question": "How is the ranking decided?",
+    "alternatePhrases": [
+      "how are ranks decided",
+      "what decides position",
+      "tie",
+      "same amount"
+    ],
+    "answer": "Only by amount, highest first. If two amounts are the same, the one paid earlier ranks higher."
+  },
+  {
+    "question": "Can I buy rank 2 or rank 5 directly?",
+    "alternatePhrases": [
+      "cheaper position",
+      "pay less for lower rank",
+      "second place",
+      "buy a lower spot"
+    ],
+    "answer": "No. Every claim has to be higher than the current #1, so a successful claim always becomes #1. Others then move down one place."
+  },
+  {
+    "question": "Why do I see \"too many attempts\"?",
+    "alternatePhrases": [
+      "too many requests",
+      "rate limit",
+      "try again later",
+      "blocked temporarily"
+    ],
+    "answer": "To prevent abuse, checkout attempts and support tickets are limited per 10 minutes. Please wait a few minutes and try again."
+  },
+  {
+    "question": "What is Buy me a chai?",
+    "alternatePhrases": [
+      "support the developer",
+      "donate",
+      "tip the developer",
+      "upi id",
+      "qr code"
+    ],
+    "answer": "It is an optional way to support the developer in the footer. You can scan the UPI QR code or use the UPI ID akatsukisites@ptaxis. It is voluntary and not needed to claim #1."
+  },
+  {
+    "question": "Who made AkatuskiSites?",
+    "alternatePhrases": [
+      "who is the developer",
+      "who owns this",
+      "who runs this website"
+    ],
+    "answer": "AkatuskiSites is built and maintained independently by its developer. For anything specific, you can raise a support ticket from the footer."
+  },
+  {
+    "question": "Which currency is used?",
+    "alternatePhrases": [
+      "is the price in rupees",
+      "can I pay in dollars",
+      "usd",
+      "inr"
+    ],
+    "answer": "All amounts are in Indian rupees (₹ INR)."
+  },
+  {
+    "question": "Can I pay from outside India?",
+    "alternatePhrases": [
+      "international payment",
+      "foreign card",
+      "pay with visa from abroad",
+      "non indian card"
+    ],
+    "answer": "Card payments are available through Stripe's payment form. Whether a particular international card is accepted depends on the card and the payment provider. If it doesn't work, please raise a support ticket from the footer."
+  },
+  {
+    "question": "Do you give an invoice or GST bill?",
+    "alternatePhrases": [
+      "gst invoice",
+      "receipt",
+      "tax invoice",
+      "bill for payment"
+    ],
+    "answer": "Invoice or GST details aren't mentioned on the site, so I can't confirm. Please raise a support ticket from the footer and ask the team."
+  },
+  {
+    "question": "Can I claim for more than one website?",
+    "alternatePhrases": [
+      "multiple websites",
+      "two businesses",
+      "claim for my other site",
+      "second listing"
+    ],
+    "answer": "Each claim is for one website. You can start another claim for a different website the same way, filling in its own details and paying the then-current price."
+  },
+  {
+    "question": "What is shown in the Top 10 list?",
+    "alternatePhrases": [
+      "what does the board show",
+      "top 10 details",
+      "leaderboard",
+      "what is the top ten"
+    ],
+    "answer": "For each of the 10 highest-ranked businesses: rank, logo (or first letter), name, website link and the amount paid. Rows get smaller as the amount gets smaller."
+  },
+  {
+    "question": "Are the website links clickable?",
+    "alternatePhrases": [
+      "do links open",
+      "will people visit my site",
+      "can visitors click my url"
+    ],
+    "answer": "Yes. Each website link opens in a new tab, so visitors can go straight to your site."
+  },
+  {
+    "question": "Is AkatuskiSites legit?",
+    "alternatePhrases": [
+      "is it safe to trust",
+      "is this a scam",
+      "can I trust this site",
+      "genuine or fake"
+    ],
+    "answer": "Payments are processed by Razorpay and Stripe, and AkatuskiSites never stores your payment details. It is built and maintained independently. If you have a concern, you can raise a support ticket from the footer."
   }
 ]

@@ -1,8 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { chunkText, matchFaq, searchKnowledge, tokenize } from '../src/content.js';
+import { chunkText, matchFaq, matchSmallTalk, normalizeTalk, searchKnowledge, tokenize } from '../src/content.js';
 import { createSessionStore, createDailyLimiter } from '../src/sessions.js';
-import { answerQuestion, isOpenAIConfigured, FALLBACK } from '../src/engine.js';
+import { answerQuestion, FALLBACK } from '../src/engine.js';
+import { isOpenAIConfigured, isGeminiConfigured, completeWithFallback, resetCooldowns, askGemini } from '../src/ai.js';
 import { createApp } from '../src/app.js';
 import { createChatLog, openChatLog } from '../src/chatlog.js';
 import { MongoClient } from 'mongodb';
@@ -70,7 +71,7 @@ test('HTTP: config, chat, validation, daily cap, origin lock', async (t) => {
   assert.equal((await (await fetch(`${base}/api/chat/widget-config/main`)).json()).name, 'Bot');
   assert.equal((await (await post({ message: 'opening hours' })).json()).source, 'faq');
   assert.equal((await (await post({ message: 'tell me more' })).json()).answer, 'AI says hi');
-  assert.match((await (await post({ message: 'another question' })).json()).answer, /trouble/); // daily cap hit
+  assert.match((await (await post({ message: 'another question' })).json()).answer, /couldn.t answer/); // daily cap hit
   assert.equal((await post({ message: '' })).status, 400);
   assert.equal(logged.length, 3);
   assert.deepEqual(logged.map((l) => l.source), ['faq', 'ai', 'error']);
@@ -114,4 +115,97 @@ test('MongoDB: TTL index is created, updated, and logs are written', async (t) =
   assert.equal(await col.countDocuments(), 1);
   const idx = (await col.indexes()).find((i) => i.key.time === 1);
   assert.equal(idx.expireAfterSeconds, 7 * 86400);
+});
+
+const talk = new Map([['hi', 'GREETING'], ['thank you', 'THANKS'], ['bye', 'BYE']].map(([p, a]) => [normalizeTalk(p), a]));
+
+test('small talk: greetings/thanks match whole messages only', () => {
+  assert.equal(matchSmallTalk(talk, 'Hi!'), 'GREETING');
+  assert.equal(matchSmallTalk(talk, 'hiiiii 😊'), 'GREETING');
+  assert.equal(matchSmallTalk(talk, 'Hi Miro,'), 'GREETING'); // filler words are ignored
+  assert.equal(matchSmallTalk(talk, "THANK YOU!!"), 'THANKS');
+  assert.equal(matchSmallTalk(talk, 'hi, how do I claim #1?'), null); // a real question is never hijacked
+  assert.equal(matchSmallTalk(talk, 'thank you for nothing, my payment failed'), null);
+  assert.equal(matchSmallTalk(talk, ''), null);
+});
+
+test('engine: small talk is answered first, free, with or without an AI key', async () => {
+  const withTalk = { ...content, smalltalk: talk };
+  for (const key of ['sk-test-123', '']) {
+    process.env.OPENAI_API_KEY = key;
+    const r = await answerQuestion({ content: withTalk, question: 'hello'.replace('hello', 'hi'), complete: async () => { throw new Error('AI must not be called'); } });
+    assert.deepEqual(r, { answer: 'GREETING', source: 'smalltalk' });
+  }
+});
+
+test('engine: configurable fallback / error messages', async () => {
+  const custom = { ...content, config: { fallbackMessage: 'FALLBACK!', errorMessage: 'ERROR!' } };
+  process.env.OPENAI_API_KEY = '';
+  assert.equal((await answerQuestion({ content: custom, question: 'zzz unknown' })).answer, 'FALLBACK!');
+  process.env.OPENAI_API_KEY = 'sk-test-123';
+  assert.equal((await answerQuestion({ content: custom, question: 'zzz unknown', complete: async () => { throw new Error('x'); } })).answer, 'ERROR!');
+});
+
+const ok = (name, text, calls) => ({ name, enabled: () => true, ask: async () => (calls?.push(name), text) });
+const bad = (name, status, calls) => ({ name, enabled: () => true, ask: async () => { calls?.push(name); throw Object.assign(new Error(`${name} down`), { status }); } });
+
+test('AI chain: falls back to the next provider and remembers a dead one', async () => {
+  resetCooldowns();
+  const calls = [];
+  const chain = [bad('openai', 429, calls), ok('gemini', ' from gemini ', calls)];
+  assert.deepEqual(await completeWithFallback([], chain), { text: 'from gemini', provider: 'gemini' });
+  assert.deepEqual(calls, ['openai', 'gemini']);
+  calls.length = 0;
+  await completeWithFallback([], chain); // openai (no credit) is skipped for a while: no wasted wait
+  assert.deepEqual(calls, ['gemini']);
+  resetCooldowns();
+});
+
+test('AI chain: skips disabled providers, throws only when everything failed', async () => {
+  resetCooldowns();
+  const off = { name: 'openai', enabled: () => false, ask: async () => { throw new Error('must not run'); } };
+  assert.equal((await completeWithFallback([], [off, ok('gemini', 'hi')])).provider, 'gemini');
+  resetCooldowns();
+  await assert.rejects(completeWithFallback([], [bad('openai', 500), bad('gemini', 503)]), /openai down.*gemini down/);
+  resetCooldowns();
+  await assert.rejects(completeWithFallback([], [off]), /no AI provider/);
+  resetCooldowns();
+});
+
+test('engine: uses the chain result and reports which provider answered', async () => {
+  process.env.OPENAI_API_KEY = 'sk-test-123';
+  const r = await answerQuestion({ content, question: 'something new', complete: async () => ({ text: 'Hello', provider: 'gemini' }) });
+  assert.deepEqual(r, { answer: 'Hello', source: 'ai', provider: 'gemini' });
+});
+
+test('Gemini request: key in a header (not the URL), system prompt + roles mapped, model list falls through', async () => {
+  process.env.GEMINI_API_KEY = 'AQ.test-key-123';
+  process.env.GEMINI_MODEL = 'model-a,model-b';
+  const seen = [];
+  const fake = async (url, init) => {
+    seen.push({ url, init });
+    return url.includes('model-a')
+      ? { ok: false, status: 503, statusText: 'busy', json: async () => ({ error: { message: 'overloaded' } }) }
+      : { ok: true, json: async () => ({ candidates: [{ content: { parts: [{ text: 'Hi ' }, { text: 'there' }] } }] }) };
+  };
+  const text = await askGemini([{ role: 'system', content: 'SYS' }, { role: 'user', content: 'q1' }, { role: 'assistant', content: 'a1' }, { role: 'user', content: 'q2' }], fake);
+  assert.equal(text, 'Hi there');
+  assert.equal(seen.length, 2);
+  assert.ok(seen.every((c) => !c.url.includes('AQ.test-key')), 'key must never be in the URL');
+  assert.equal(seen[1].init.headers['x-goog-api-key'], 'AQ.test-key-123');
+  const body = JSON.parse(seen[1].init.body);
+  assert.equal(body.systemInstruction.parts[0].text, 'SYS');
+  assert.deepEqual(body.contents.map((c) => c.role), ['user', 'model', 'user']);
+  // a bad key fails immediately on every model: don't hammer the rest of the list
+  seen.length = 0;
+  const denied = async (url, init) => (seen.push(url), { ok: false, status: 403, statusText: 'no', json: async () => ({ error: { message: 'API key not valid' } }) });
+  await assert.rejects(askGemini([{ role: 'user', content: 'x' }], denied), /403/);
+  assert.equal(seen.length, 1);
+  delete process.env.GEMINI_MODEL;
+});
+
+test('isGeminiConfigured rejects blanks and placeholders', () => {
+  assert.equal(isGeminiConfigured(''), false);
+  assert.equal(isGeminiConfigured('your-key-here'), false);
+  assert.equal(isGeminiConfigured('AQ.abc'), true);
 });

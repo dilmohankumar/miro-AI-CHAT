@@ -20,6 +20,6 @@
   --panel: linear-gradient(165deg, #ffffff 0%, #f3f8ff 55%, #e2edff 100%);
 }
 
-button:focus:not(:focus-visible) { outline: none; }
-button:focus-visible { outline: 2px solid rgb(59 130 246 / .7); outline-offset: 2px; }
-textarea:focus, textarea:focus-visible { outline: none; } /* the input's wrapper already shows a focus glow */
+/* No focus rings anywhere (design choice). */
+button, textarea, a, [role=tab] { -webkit-tap-highlight-color: transparent; }
+button:focus, button:focus-visible, textarea:focus, textarea:focus-visible, a:focus-visible, [role=tab]:focus-visible { outline: none; }

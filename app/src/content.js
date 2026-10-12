@@ -11,12 +11,27 @@ const CHUNK_SIZE = 1000;
 const CHUNK_OVERLAP = 120;
 const FAQ_THRESHOLD = 0.34;
 
+// Words that don't change the meaning of small talk ("hi miro", "thanks bro", "hello there please").
+const TALK_FILLER = new Set(['miro', 'there', 'bro', 'sir', 'mam', 'madam', 'ji', 'please', 'pls', 'plz', 'bhai', 'dear', 'team', 'assistant', 'bot']);
+
 export function tokenize(text) {
   return (text || '')
     .toLowerCase()
     .replace(/[^\p{L}\p{M}\p{N}\s]/gu, ' ')
     .split(/\s+/)
     .filter((t) => t.length > 1 && !STOPWORDS.has(t));
+}
+
+// Lowercase, strip punctuation/emoji/apostrophes, squash stretched letters ("hiii" -> "hi"), drop filler words.
+export function normalizeTalk(text) {
+  return (text || '')
+    .toLowerCase()
+    .replace(/'/g, '')
+    .replace(/[^\p{L}\p{M}\p{N}\s]/gu, ' ')
+    .replace(/(.)\1{2,}/g, '$1')
+    .split(/\s+/)
+    .filter((w) => w && !TALK_FILLER.has(w))
+    .join(' ');
 }
 
 export function chunkText(text) {
@@ -49,7 +64,16 @@ export function loadContent(dir) {
     chunkText(fs.readFileSync(path.join(kDir, file), 'utf8')).map((text) => ({ text, source: file }))
   );
 
-  return { config, faqs, chunks };
+  // content/smalltalk.json: [{ "phrases": ["hi", ...], "answer": "..." }] - free answers for greetings, thanks, bye...
+  const talk = readJson(path.join(dir, 'smalltalk.json'), []).filter((t) => Array.isArray(t.phrases) && t.answer);
+  const smalltalk = new Map(talk.flatMap((t) => t.phrases.map((p) => [normalizeTalk(p), t.answer])));
+
+  return { config, faqs, chunks, smalltalk };
+}
+
+// Exact match on the WHOLE message, so "hi, how do I claim #1?" is never hijacked by the greeting.
+export function matchSmallTalk(smalltalk, text) {
+  return smalltalk?.get(normalizeTalk(text)) ?? null;
 }
 
 function jaccard(a, b) {

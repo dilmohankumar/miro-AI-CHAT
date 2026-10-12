@@ -6,12 +6,13 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
-import { answerQuestion, defaultComplete, isOpenAIConfigured } from './engine.js';
+import { answerQuestion } from './engine.js';
+import { completeWithFallback, isAiConfigured, PROVIDERS } from './ai.js';
 import { createSessionStore, createDailyLimiter } from './sessions.js';
 
 const PUBLIC_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'public');
 
-export function createApp({ content, dailyLimit = Number(process.env.DAILY_CHAT_LIMIT || 500), complete = defaultComplete, log = { write() {} } } = {}) {
+export function createApp({ content, dailyLimit = Number(process.env.DAILY_CHAT_LIMIT || 500), complete = completeWithFallback, log = { write() {} } } = {}) {
   const { config } = content;
   const sessions = createSessionStore();
   const daily = createDailyLimiter(dailyLimit);
@@ -36,7 +37,7 @@ export function createApp({ content, dailyLimit = Number(process.env.DAILY_CHAT_
 
   app.use('/api', cors({ origin: true }));
 
-  app.get('/api/health', (_req, res) => res.json({ ok: true, ai: isOpenAIConfigured() }));
+  app.get('/api/health', (_req, res) => res.json({ ok: true, ai: isAiConfigured(), providers: PROVIDERS.filter((p) => p.enabled()).map((p) => p.name) }));
 
   app.get('/api/chat/widget-config/:id', (_req, res) => {
     const { name, heroTitle, welcomeMessage, teaser, quickReplies, themeColor, theme, avatarUrl, avatarFit, voice, voiceLang, voiceGreeting } = config;
@@ -73,7 +74,7 @@ export function createApp({ content, dailyLimit = Number(process.env.DAILY_CHAT_
       });
 
       sessions.append(sid, { role: 'user', content: message }, { role: 'assistant', content: result.answer });
-      log.write({ sessionId: sid, question: message, answer: result.answer, source: result.source });
+      log.write({ sessionId: sid, question: message, answer: result.answer, source: result.source, ...(result.provider && { provider: result.provider }) });
       res.json({ sessionId: sid, answer: result.answer, source: result.source });
     } catch (err) {
       next(err);

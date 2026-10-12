@@ -174,7 +174,7 @@ export default function VoicePanel({ lang, messages, send, onUseText, dark = fal
       <div className="relative pb-4 pt-1">
         <p className={`mb-3 text-center text-xs font-medium ${T.status}`} role="status">{STATUS[state]}</p>
         <div className="flex justify-center">
-          <button data-orb onClick={onMain} disabled={state === 'thinking'} aria-label={state === 'speaking' ? 'Stop speaking' : state === 'listening' ? 'Pause microphone' : state === 'paused' ? 'Resume listening' : 'Thinking'} className={`relative grid h-16 w-16 place-items-center rounded-full outline-none transition active:scale-95 focus-visible:ring-4 focus-visible:ring-sky-300/50 disabled:opacity-90 ${T.main}`}>
+          <button data-orb onClick={onMain} disabled={state === 'thinking'} aria-label={state === 'speaking' ? 'Stop speaking' : state === 'listening' ? 'Pause microphone' : state === 'paused' ? 'Resume listening' : 'Thinking'} className={`relative grid h-16 w-16 place-items-center rounded-full outline-none transition active:scale-95 disabled:opacity-90 ${T.main}`}>
             {state === 'listening' && <span className={`absolute inset-0 animate-ping rounded-full ${T.ping}`} />}
             {state === 'thinking' && <span className={`absolute -inset-1 animate-spin rounded-full border-[3px] border-transparent ${T.spin}`} />}
             <span className="relative">

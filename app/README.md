@@ -23,10 +23,15 @@ Editing anything in `content/` or `src/` restarts the server automatically.
 Changed the widget UI (`widget/src`)? Rebuild it: `npm run build:widget` (outputs `public/widget.js`).
 
 ## How answers work
+0. Greetings / thanks / bye (`content/smalltalk.json`) -> instant, free, whole-message match only.
 1. Visitor's question matches a FAQ in `content/faqs.json` -> instant answer, no AI cost.
 2. Otherwise the AI answers using `faqs.json` + `content/knowledge/*` only. If it
    isn't covered, it says so instead of guessing.
-3. No/invalid `OPENAI_API_KEY` -> FAQ answers still work; everything else gets a polite fallback.
+3. AI providers are tried in order: OpenAI (`OPENAI_API_KEY`), then Google Gemini (`GEMINI_API_KEY`, optional
+   fallback). If OpenAI has no credit / is down, Gemini answers automatically; a failing provider is skipped for a
+   while (10 min if no credit, 30 s otherwise) so visitors never wait on it. `GEMINI_MODEL` can list several models
+   ("a,b"), tried in order. With no key at all, FAQ and small-talk answers still work and the rest gets a polite message.
+   `GET /api/health` shows which providers are active (never the keys).
 
 ## Put the chat on any website
 Add before `</body>` (replace the domain with where this server is deployed):

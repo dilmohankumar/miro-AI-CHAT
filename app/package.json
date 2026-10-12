@@ -11,7 +11,8 @@
     "start": "node --env-file=.env src/server.js",
     "logs": "node --env-file=.env src/logs-report.js",
     "test": "node --test test/*.test.js",
-    "build:widget": "vite build --config widget/vite.config.js"
+    "build:widget": "vite build --config widget/vite.config.js",
+    "check": "node src/check-content.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
