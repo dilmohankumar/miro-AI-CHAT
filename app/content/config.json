@@ -1,0 +1,16 @@
+{
+  "name": "Miro",
+  "heroTitle": "Hi there! 👋",
+  "welcomeMessage": "I'm your AI assistant. How can I help you today?",
+  "teaser": "Need help? Ask me anything 👋",
+  "quickReplies": ["What do you offer?", "How can I contact you?", "What are your opening hours?"],
+  "themeColor": "#2563eb",
+  "theme": "light",
+  "avatarUrl": "/images/Avatar.png",
+  "avatarFit": "round",
+  "voice": true,
+  "voiceLang": "",
+  "voiceGreeting": "Hi, I'm Miro. How can I help you?",
+  "allowedOrigins": [],
+  "systemPrompt": "You are the friendly website assistant for this business. Answer visitors' questions using only the business information provided. Reply in the same language the visitor uses. Keep answers short and clear."
+}

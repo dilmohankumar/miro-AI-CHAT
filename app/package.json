@@ -1,0 +1,35 @@
+{
+  "name": "website-ai-chatbot",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "nodemon --watch src --watch content --ext js,json,md,txt --exec \"node --env-file=.env\" src/server.js",
+    "start": "node --env-file=.env src/server.js",
+    "logs": "node --env-file=.env src/logs-report.js",
+    "test": "node --test test/*.test.js",
+    "build:widget": "vite build --config widget/vite.config.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^7.1.0",
+    "mongodb": "~7.7.0",
+    "morgan": "^1.10.0",
+    "openai": "^4.104.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "~6.1.2",
+    "autoprefixer": "~10.6.1",
+    "nodemon": "~3.1.14",
+    "postcss": "~8.5.29",
+    "react": "~19.3.0",
+    "react-dom": "~19.3.0",
+    "tailwindcss": "~3.4.19",
+    "vite": "~8.3.4"
+  }
+}

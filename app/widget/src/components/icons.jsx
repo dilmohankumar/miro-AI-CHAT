@@ -1,0 +1,17 @@
+const base = { width: 20, height: 20, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' };
+export const SendIcon = (p) => (<svg {...base} {...p}><path d="M22 2 11 13" /><path d="m22 2-7 20-4-9-9-4 20-7Z" /></svg>);
+export const CloseIcon = (p) => (<svg {...base} {...p}><path d="M18 6 6 18M6 6l12 12" /></svg>);
+export const MicIcon = (p) => (<svg {...base} {...p}><rect x="9" y="3" width="6" height="12" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v3" /></svg>);
+export const ChatIcon = (p) => (<svg {...base} {...p}><path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-5.4A8 8 0 1 1 21 12Z" /></svg>);
+export const ShieldIcon = (p) => (<svg {...base} {...p}><path d="M12 3 4 6v6c0 4.5 3.2 8 8 9 4.8-1 8-4.5 8-9V6l-8-3Z" /><path d="m9 12 2 2 4-4" /></svg>);
+export const SparkIcon = (p) => (<svg {...base} {...p}><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18" /></svg>);
+export const RefreshIcon = (p) => (<svg {...base} {...p}><path d="M21 12a9 9 0 1 1-3-6.7L21 8" /><path d="M21 3v5h-5" /></svg>);
+export const CopyIcon = (p) => (<svg {...base} {...p}><rect x="9" y="9" width="12" height="12" rx="2" /><path d="M5 15V5a2 2 0 0 1 2-2h10" /></svg>);
+export const CheckIcon = (p) => (<svg {...base} {...p}><path d="m5 12 5 5 9-10" /></svg>);
+export const ArrowDownIcon = (p) => (<svg {...base} {...p}><path d="M12 5v14M5 12l7 7 7-7" /></svg>);
+export const NewChatIcon = (p) => (<svg {...base} {...p}><path d="M12 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6" /><path d="M17.4 3.6a2 2 0 0 1 2.9 2.9L11 15.8 7 17l1.2-4 9.2-9.4Z" /></svg>);
+export const SpeakerIcon = (p) => (<svg {...base} {...p}><path d="M11 5 6 9H3v6h3l5 4V5Z" /><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" /></svg>);
+export const SpeakerOffIcon = (p) => (<svg {...base} {...p}><path d="M11 5 6 9H3v6h3l5 4V5Z" /><path d="m22 9-6 6M16 9l6 6" /></svg>);
+export const RepeatIcon = (p) => (<svg {...base} {...p}><path d="m17 2 4 4-4 4" /><path d="M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4" /><path d="M21 13v2a3 3 0 0 1-3 3H3" /></svg>);
+export const MicOffIcon = (p) => (<svg {...base} {...p}><path d="m2 2 20 20" /><path d="M9 9v3a3 3 0 0 0 5.1 2.1M15 9.3V5a3 3 0 0 0-5.7-1.3" /><path d="M5 11a7 7 0 0 0 11.5 5.4M19 11a7 7 0 0 1-.6 2.8M12 18v3" /></svg>);
+export const StopSquareIcon = (p) => (<svg {...base} {...p}><rect x="6" y="6" width="12" height="12" rx="2.5" fill="currentColor" /></svg>);

@@ -1,0 +1,12 @@
+[
+  {
+    "question": "What are your opening hours?",
+    "alternatePhrases": ["when are you open", "working hours", "timing"],
+    "answer": "We are open 9am-6pm, Monday to Saturday."
+  },
+  {
+    "question": "How can I contact you?",
+    "alternatePhrases": ["contact number", "phone", "email address"],
+    "answer": "You can reach us at hello@example.com."
+  }
+]

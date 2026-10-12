@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* The widget lives in a Shadow DOM: isolate it from the host page's inheritable styles. */
+:host { all: initial; }
+.scroll-thin::-webkit-scrollbar { width: 6px; }
+.scroll-thin::-webkit-scrollbar-thumb { background: rgb(var(--fg) / .2); border-radius: 9999px; }
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Theme tokens (set via data-theme on the widget root). */
+[data-theme='dark'] {
+  --fg: 255 255 255; --pop: 12 22 56; --err: 254 226 226; --blob: 1;
+  --panel: radial-gradient(120% 80% at 80% 0%, #1e3a8a 0%, #0f1f4d 45%, #070d24 100%);
+}
+[data-theme='light'] {
+  --fg: 15 32 77; --pop: 255 255 255; --err: 185 28 28; --blob: .5;
+  --panel: linear-gradient(165deg, #ffffff 0%, #f3f8ff 55%, #e2edff 100%);
+}
+
+button:focus:not(:focus-visible) { outline: none; }
+button:focus-visible { outline: 2px solid rgb(59 130 246 / .7); outline-offset: 2px; }
+textarea:focus, textarea:focus-visible { outline: none; } /* the input's wrapper already shows a focus glow */
